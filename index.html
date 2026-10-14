@@ -1,24 +1,68 @@
 <!DOCTYPE html>
-<html lang="pl">
-<head>
-<meta charset="UTF-8">
+<html lang="pl"><head><meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GMEDIA – Social Media Management</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght=0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#06060c;--bg2:#0d0d14;--bg3:#12121a;
   --accent:#a855f7;--accent2:#06b6d4;--accent3:#f59e0b;--accent4:#ec4899;
+  --success:#10b981;
   --text:#f0eeff;--text2:#8080a0;--border:rgba(168,85,247,0.15);--r:16px;
 }
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
 
+/* WYŁĄCZENIE DOMYŚLNEGO KURSORA NA DESKTOPIE */
+@media (min-width: 901px) {
+  body, a, button, input, textarea, select, .service-card, .addon-card, .tag, .fact-item {
+    cursor: none !important;
+  }
+}
+
+/* UKRYCIE KURSORA GDY OPUSZCZA EKRAN */
+.cursor-hidden {
+  opacity: 0 !important;
+}
+
+/* PRECYZYJNY KURSOR BŁYSKAWICA */
+.custom-cursor-lightning {
+  width: 28px;
+  height: 28px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 1;
+  transform: translate(0, 0); /* Klikamy dokładnie lewym górnym rogiem grafiki */
+  transition: opacity 0.2s, transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  filter: drop-shadow(0 2px 5px rgba(6, 182, 212, 0.5));
+}
+.custom-cursor-lightning svg {
+  width: 100%;
+  height: 100%;
+  fill: url(#lightning-grad);
+  transition: fill 0.2s, filter 0.2s;
+}
+
+/* EFEKT REAKCJI NA HOVER */
+.custom-cursor-hover .custom-cursor-lightning {
+  transform: scale(1.25);
+  filter: drop-shadow(0 2px 8px rgba(236, 72, 153, 0.8));
+}
+.custom-cursor-hover .custom-cursor-lightning svg {
+  fill: var(--accent4);
+}
+
 /* CANVAS PARTICLES */
 #particles-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-/* NOISE */
+/* NOISE - TU ZOSTAWIONY TYLKO CZYSTY SZUM BEZ GRADIENTU PASKA */
 body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");opacity:0.025;pointer-events:none;z-index:1}
 
 /* NAV */
@@ -42,28 +86,14 @@ nav a:not(.nav-cta):hover::after{transform:scaleX(1)}
 .nav-cta{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff!important;padding:.55rem 1.4rem;border-radius:50px;font-weight:600!important;transition:opacity .2s,transform .2s!important}
 .nav-cta:hover{opacity:.85;transform:translateY(-2px)!important}
 
-/* MARQUEE */
-.marquee-wrap{overflow:hidden;padding:.7rem 0;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent4),var(--accent3));position:relative;z-index:2}
-.marquee-track{display:flex;white-space:nowrap;animation:marquee 20s linear infinite}
-.marquee-track span{font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;padding:0 2.5rem}
-.marquee-track span::before{content:'★ ';opacity:.5}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
 /* HERO */
 #hero{min-height:100vh;display:flex;align-items:center;padding:9rem 6vw 4rem;position:relative;overflow:hidden;z-index:2}
 .hero-bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(168,85,247,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(168,85,247,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%)}
-.orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px)}
-.orb1{width:700px;height:700px;background:radial-gradient(circle,rgba(168,85,247,.22),transparent 70%);top:-150px;right:-150px;animation:orbFloat1 10s ease-in-out infinite}
-.orb2{width:500px;height:500px;background:radial-gradient(circle,rgba(6,182,212,.15),transparent 70%);bottom:-100px;left:-100px;animation:orbFloat2 13s ease-in-out infinite}
-.orb3{width:300px;height:300px;background:radial-gradient(circle,rgba(245,158,11,.1),transparent 70%);top:40%;left:40%;animation:orbFloat3 8s ease-in-out infinite}
-@keyframes orbFloat1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-40px,50px) scale(1.05)}66%{transform:translate(20px,-30px) scale(.97)}}
-@keyframes orbFloat2{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-40px)}}
-@keyframes orbFloat3{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.3)}}
 
 .hero-inner{max-width:850px;position:relative;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);border-radius:50px;padding:.4rem 1rem;font-size:.82rem;color:var(--accent);font-weight:500;margin-bottom:1.8rem;animation:fadeUp .6s ease both}
-.hero-badge-dot{width:7px;height:7px;background:var(--accent);border-radius:50%;animation:pulse 1.8s ease-in-out infinite;box-shadow:0 0 8px var(--accent)}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 8px var(--accent)}50%{opacity:.3;box-shadow:0 0 2px var(--accent)}}
+.hero-badge{display:inline-flex;align-items:center;gap:10px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);border-radius:50px;padding:.5rem 1.2rem;font-size:.95rem;color:var(--text);font-weight:500;margin-bottom:1.8rem;animation:fadeUp .6s ease both}
+.hero-badge-dot{width:8px;height:8px;background:var(--success);border-radius:50%;animation:pulse 1.8s ease-in-out infinite;box-shadow:0 0 8px var(--success)}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 8px var(--success)}50%{opacity:.3;box-shadow:0 0 2px var(--success)}}
 
 h1{font-family:'Syne',sans-serif;font-size:clamp(3rem,6.5vw,5.5rem);font-weight:800;line-height:1.05;letter-spacing:-3px;margin-bottom:1.5rem}
 .hero-line1{overflow:hidden}
@@ -77,7 +107,7 @@ h1{font-family:'Syne',sans-serif;font-size:clamp(3rem,6.5vw,5.5rem);font-weight:
 
 .hero-sub{font-size:1.15rem;color:var(--text2);max-width:560px;margin-bottom:2.5rem;font-weight:300;line-height:1.8;animation:fadeUp .7s .35s ease both}
 .hero-btns{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .7s .45s ease both}
-.btn{display:inline-block;padding:.9rem 2.2rem;border-radius:50px;font-weight:600;font-size:.95rem;cursor:pointer;text-decoration:none;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
+.btn{display:inline-block;padding:.9rem 2.2rem;border-radius:50px;font-weight:600;font-size:.95rem;text-decoration:none;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden}
 .btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);opacity:0;transition:opacity .3s}
 .btn:hover::before{opacity:1}
 .btn:hover{transform:translateY(-3px)}
@@ -113,6 +143,7 @@ h2{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:
 #omnie{background:var(--bg2)}
 #omnie::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(168,85,247,.05),transparent 60%)}
 .omnie-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;margin-top:4rem}
+.omnie-grid .tag, .omnie-grid .fact-item { cursor: none !important; }
 .omnie-card{background:var(--bg3);border:1px solid var(--border);border-radius:24px;padding:2.5rem;position:relative;overflow:hidden;transition:border-color .3s}
 .omnie-card:hover{border-color:rgba(168,85,247,.4)}
 .omnie-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top left,rgba(168,85,247,.08),transparent 60%);pointer-events:none}
@@ -126,8 +157,7 @@ h2{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:
 .omnie-role{color:var(--accent);font-size:.88rem;font-weight:500;margin-bottom:1.5rem}
 .omnie-card p{color:var(--text2);font-weight:300;font-size:.97rem;line-height:1.8;margin-bottom:1rem}
 .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:1.5rem}
-.tag{background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);color:var(--accent);border-radius:50px;padding:.3rem .9rem;font-size:.78rem;font-weight:500;transition:background .2s,border-color .2s;cursor:default}
-.tag:hover{background:rgba(168,85,247,.18);border-color:rgba(168,85,247,.5)}
+.tag{background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);color:var(--accent);border-radius:50px;padding:.3rem .9rem;font-size:.78rem;font-weight:500;transition:background .2s,border-color .2s}
 
 .omnie-facts{display:flex;flex-direction:column;gap:1.2rem}
 .fact-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;display:flex;align-items:flex-start;gap:1.2rem;transition:transform .3s,border-color .3s,box-shadow .3s}
@@ -146,7 +176,7 @@ h2{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:
 #uslugi::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 80%,rgba(6,182,212,.05),transparent 60%)}
 .uslugi-header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:2rem;margin-bottom:3.5rem}
 .uslugi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:3rem}
-.service-card{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:2rem;position:relative;overflow:hidden;transition:transform .3s cubic-bezier(0.34,1.56,0.64,1),border-color .3s,box-shadow .3s;cursor:default}
+.service-card{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:2rem;position:relative;overflow:hidden;transition:transform .3s cubic-bezier(0.34,1.56,0.64,1),border-color .3s,box-shadow .3s}
 .service-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(168,85,247,.06),transparent);opacity:0;transition:opacity .3s}
 .service-card:hover{transform:translateY(-10px) scale(1.01);border-color:rgba(168,85,247,.45);box-shadow:0 24px 64px rgba(168,85,247,.15)}
 .service-card:hover::before{opacity:1}
@@ -166,8 +196,8 @@ h2{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:
 .sf-check{width:18px;height:18px;border-radius:50%;background:rgba(6,182,212,.15);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--accent2);flex-shrink:0}
 .addons{margin-top:1rem}
 .addons-label{font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text2);margin-bottom:1rem}
-.addons-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
-.addon-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;transition:transform .25s,border-color .25s;cursor:default}
+.addons-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.addon-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;transition:transform .25s,border-color .25s}
 .addon-card:hover{transform:translateY(-4px);border-color:rgba(168,85,247,.35)}
 .addon-name{font-weight:500;font-size:.9rem;margin-bottom:.3rem}
 .addon-price{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;font-size:1rem}
@@ -175,9 +205,9 @@ h2{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,4vw,3.2rem);font-weight:
 /* GIF SECTION */
 .gif-section{display:flex;justify-content:center;margin:2rem 0 4rem}
 .gif-wrap{display:flex;flex-direction:column;align-items:center;gap:1rem}
-.gif-frame{border-radius:20px;overflow:hidden;border:2px solid rgba(168,85,247,.3);box-shadow:0 0 40px rgba(168,85,247,.2),0 0 80px rgba(168,85,247,.08);transition:transform .3s,box-shadow .3s}
+.gif-frame{width:340px;height:270px;border-radius:20px;overflow:hidden;border:2px solid rgba(168,85,247,.3);box-shadow:0 0 40px rgba(168,85,247,.2),0 0 80px rgba(168,85,247,.08);transition:transform .3s,box-shadow .3s}
 .gif-frame:hover{transform:scale(1.04) rotate(-1deg);box-shadow:0 0 60px rgba(168,85,247,.35)}
-.giphy-embed{display:block}
+.gif-frame img{width:100%;height:100%;object-fit:cover;display:block}
 .gif-caption{font-family:'Syne',sans-serif;font-size:1rem;font-weight:600;color:var(--text2);letter-spacing:.01em}
 
 /* KONTAKT */
@@ -206,11 +236,55 @@ input::placeholder,textarea::placeholder{color:rgba(128,128,160,.4)}
 input:focus,textarea:focus,select:focus{border-color:var(--accent);background:rgba(168,85,247,.05);box-shadow:0 0 0 4px rgba(168,85,247,.08)}
 textarea{resize:none;height:130px}
 select option{background:#12121a}
-.form-submit{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:50px;padding:1.05rem;color:#fff;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;margin-top:.5rem;transition:opacity .2s,transform .2s,box-shadow .2s;letter-spacing:.02em;position:relative;overflow:hidden}
+.form-submit{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:50px;padding:1.05rem;color:#fff;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-top:.5rem;transition:opacity .2s,transform .2s,box-shadow .2s;letter-spacing:.02em;position:relative;overflow:hidden}
 .form-submit::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.2),transparent);opacity:0;transition:opacity .3s}
 .form-submit:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 12px 40px rgba(168,85,247,.4)}
 .form-submit:hover::before{opacity:1}
 .form-submit:active{transform:scale(.98)}
+.form-submit:disabled{background:linear-gradient(135deg,#6b21a8,#0e7490);opacity:.6;cursor:not-allowed}
+
+/* STYLE MOCKUPU PODZIĘKOWANIA */
+.thank-you-box {
+  background: var(--bg3);
+  border: 1px solid var(--success);
+  border-radius: 24px;
+  padding: 3.5rem 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(16, 185, 129, 0.1);
+}
+.thank-you-box::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.08), transparent 70%);
+  pointer-events: none;
+}
+.thank-you-box .ty-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  animation: scaleUpCheck 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.thank-you-box h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, var(--success), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.thank-you-box p {
+  color: var(--text2);
+  font-weight: 300;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+@keyframes scaleUpCheck {
+  from { transform: scale(0) rotate(-20deg); opacity: 0; }
+  to { transform: scale(1) rotate(0deg); opacity: 1; }
+}
 
 /* COUNTER */
 .counter-num{display:inline}
@@ -223,7 +297,7 @@ footer .logo{font-size:1.2rem}
 @media(max-width:900px){
   .omnie-grid,.kontakt-grid{grid-template-columns:1fr;gap:2.5rem}
   .uslugi-grid{grid-template-columns:1fr}
-  .addons-grid{grid-template-columns:1fr 1fr}
+  .addons-grid{grid-template-columns:1fr}
   nav ul{display:none}
   .hero-stats{gap:1.5rem}
   .form-row{grid-template-columns:1fr}
@@ -231,6 +305,18 @@ footer .logo{font-size:1.2rem}
 </style>
 </head>
 <body>
+
+<div class="custom-cursor-lightning">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <lineargradient id="lightning-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#06b6d4"></stop>
+        <stop offset="100%" stop-color="#a855f7"></stop>
+      </lineargradient>
+    </defs>
+    <path d="M0 0 L15 9 L9 10 L16 24 L5 13 L10 12 Z"></path>
+  </svg>
+</div>
 
 <canvas id="particles-canvas"></canvas>
 
@@ -247,31 +333,17 @@ footer .logo{font-size:1.2rem}
   </ul>
 </nav>
 
-<div class="marquee-wrap" style="margin-top:64px;position:relative;z-index:3">
-  <div class="marquee-track">
-    <span>Instagram</span><span>TikTok</span><span>Facebook</span><span>LinkedIn</span>
-    <span>Content Strategy</span><span>Reels</span><span>Meta Ads</span><span>Engagement</span>
-    <span>Brand Growth</span><span>Analytics</span><span>Community</span><span>Stories</span>
-    <span>Instagram</span><span>TikTok</span><span>Facebook</span><span>LinkedIn</span>
-    <span>Content Strategy</span><span>Reels</span><span>Meta Ads</span><span>Engagement</span>
-    <span>Brand Growth</span><span>Analytics</span><span>Community</span><span>Stories</span>
-  </div>
-</div>
-
 <section id="hero">
   <div class="hero-bg-grid"></div>
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
   <div class="hero-inner">
     <div class="hero-badge"><span class="hero-badge-dot"></span>Dostępny dla nowych klientów</div>
     <h1>
-      <div class="hero-line1"><span class="slide-up">Social media,</span></div>
-      <div class="hero-line2"><span class="slide-up-delay"><span class="grad">które naprawdę działają.</span></span></div>
+      <div class="hero-line1"><span class="slide-up">Przestań robić posty</span></div>
+      <div class="hero-line2"><span class="slide-up-delay"><span class="grad">po godzinach.</span></span></div>
     </h1>
     <p class="hero-sub">
-      Zarządzam profilami marek na Instagramie, TikToku i Facebooku.
-      Tworzę treści, które angażują, i strategie, które konwertują.
+      Prowadzę Instagram i Facebook małych firm: posty, plan treści i raport co miesiąc.
+      Ty zatwierdzasz, resztę robię ja.
     </p>
     <div class="hero-btns">
       <a href="#uslugi" class="btn btn-primary">Zobacz ofertę</a>
@@ -279,16 +351,16 @@ footer .logo{font-size:1.2rem}
     </div>
     <div class="hero-stats">
       <div>
-        <div class="stat-val"><span class="counter-num" data-target="80">0</span>+</div>
-        <div class="stat-label">Obsłużonych klientów</div>
+        <div class="stat-val"><span class="counter-num" data-target="3">3</span> lata</div>
+        <div class="stat-label">Doświadczenia w social mediach</div>
       </div>
       <div>
-        <div class="stat-val"><span class="counter-num" data-target="3.2" data-suffix="M">0</span>M</div>
-        <div class="stat-label">Zasięg miesięcznie</div>
+        <div class="stat-val">14 → 20</div>
+        <div class="stat-label">Telefonów dziennie w firmie beauty po 2 miesiącach</div>
       </div>
       <div>
-        <div class="stat-val"><span class="counter-num" data-target="5">0</span> lat</div>
-        <div class="stat-label">Doświadczenia</div>
+        <div class="stat-val">6 h</div>
+        <div class="stat-label">Tygodniowo odzyskane (wg właściciela)</div>
       </div>
     </div>
   </div>
@@ -301,20 +373,20 @@ footer .logo{font-size:1.2rem}
     <div class="omnie-card reveal-left">
       <div class="shine"></div>
       <div class="avatar-circle">GM</div>
-      <h3>GMEDIA</h3>
+      <h3>Grzegorz Pich</h3>
       <div class="omnie-role">Freelance Social Media Manager</div>
-      <p>Cześć! Pomagam markom budować autentyczną obecność w mediach społecznościowych. Specjalizuję się w tworzeniu angażujących treści, prowadzeniu kampanii i analizie wyników.</p>
+      <p>Cześć! Pomagam markom budować autentyczną obecność w mediach społecznościowych. Specjalizuję się w tworzeniu angażujących treści, planowaniu publikacji i analizie wyników.</p>
       <p>Nie wierzę w generyczne rozwiązania – każda marka jest inna i zasługuje na indywidualną strategię dopasowaną do jej celów i odbiorców.</p>
       <div class="tags">
         <span class="tag">Instagram</span><span class="tag">TikTok</span><span class="tag">Facebook</span>
         <span class="tag">LinkedIn</span><span class="tag">Content</span><span class="tag">Reels</span>
-        <span class="tag">Meta Ads</span><span class="tag">Analytics</span>
+        <span class="tag">Analytics</span>
       </div>
     </div>
     <div class="omnie-facts">
       <div class="fact-item reveal" style="transition-delay:.05s">
         <div class="fact-icon fi-1">🎯</div>
-        <div><div class="fact-title">Strategia oparta na danych</div><div class="fact-desc">Każda decyzja poparta analizą zasięgów, zaangażowania i zachowań odbiorców.</div></div>
+        <div><div class="fact-title">Plan treści i research</div><div class="fact-desc">Każdy miesiąc zaczyna się od planu pod Twoją branżę i klientów, a nie od pomysłu na ostatnią chwilę.</div></div>
       </div>
       <div class="fact-item reveal" style="transition-delay:.12s">
         <div class="fact-icon fi-2">✍️</div>
@@ -326,7 +398,7 @@ footer .logo{font-size:1.2rem}
       </div>
       <div class="fact-item reveal" style="transition-delay:.26s">
         <div class="fact-icon fi-4">⚡</div>
-        <div><div class="fact-title">Szybki czas reakcji</div><div class="fact-desc">Odpowiadam w ciągu kilku godzin. Twoi obserwatorzy nie będą czekać na moderację.</div></div>
+        <div><div class="fact-title">Odpowiedź w ciągu 24 godzin</div><div class="fact-desc">Ty zatwierdzasz posty, resztę robię ja. Bez długich spotkań i bez ciągłego pilnowania profilu.</div></div>
       </div>
     </div>
   </div>
@@ -337,7 +409,7 @@ footer .logo{font-size:1.2rem}
     <div>
       <div class="section-tag reveal">Usługi i cennik</div>
       <h2 class="reveal">Wybierz swój pakiet</h2>
-      <p class="section-sub reveal">Każdy pakiet można rozszerzyć o dodatki. Nie wiesz co wybrać? Napisz – doradzimy.</p>
+      <p class="section-sub reveal">Nie wiesz, co wybrać? Napisz, pomogę wybrać najlepszą opcję dla Ciebie i Twojej firmy.</p>
     </div>
   </div>
   <div class="uslugi-grid">
@@ -349,51 +421,40 @@ footer .logo{font-size:1.2rem}
       <div class="service-price">1 200 zł <span>/ miesiąc</span></div>
       <div class="service-features">
         <div class="sf"><div class="sf-check">✓</div>1 platforma (Instagram lub Facebook)</div>
-        <div class="sf"><div class="sf-check">✓</div>12 postów miesięcznie</div>
+        <div class="sf"><div class="sf-check">✓</div>12 postów miesięcznie (4 karuzele + 8 grafik)</div>
         <div class="sf"><div class="sf-check">✓</div>Planowanie i publikacja</div>
-        <div class="sf"><div class="sf-check">✓</div>Moderacja komentarzy</div>
+        <div class="sf"><div class="sf-check">✓</div>Plan treści i research</div>
         <div class="sf"><div class="sf-check">✓</div>Raport miesięczny</div>
       </div>
     </div>
     <div class="service-card featured reveal" style="transition-delay:.12s">
       <div class="card-glow"></div>
-      <div class="featured-badge">Najpopularniejszy</div>
+      <div class="featured-badge">Polecany</div>
       <div class="service-icon">🚀</div>
       <h3>Growth</h3>
-      <p>Dla marek gotowych na wzrost – więcej platform, więcej treści i aktywne wsparcie w budowaniu społeczności.</p>
-      <div class="service-price">2 400 zł <span>/ miesiąc</span></div>
+      <p>Dla marek gotowych na wzrost – druga platforma, Reelsy i miesięczna rozmowa o strategii.</p>
+      <div class="service-price">2 000 zł <span>/ miesiąc</span></div>
       <div class="service-features">
-        <div class="sf"><div class="sf-check">✓</div>2 platformy + TikTok</div>
-        <div class="sf"><div class="sf-check">✓</div>20 postów + 4 Reelsy/TikToki</div>
-        <div class="sf"><div class="sf-check">✓</div>Strategia contentu</div>
-        <div class="sf"><div class="sf-check">✓</div>Moderacja i obsługa DM</div>
-        <div class="sf"><div class="sf-check">✓</div>Stories (15/mies.)</div>
-        <div class="sf"><div class="sf-check">✓</div>Raport + konsultacja online</div>
+        <div class="sf"><div class="sf-check">✓</div>2 platformy (Instagram + Facebook lub LinkedIn)</div>
+        <div class="sf"><div class="sf-check">✓</div>16 postów miesięcznie + 2 Reelsy</div>
+        <div class="sf"><div class="sf-check">✓</div>Plan treści i research</div>
+        <div class="sf"><div class="sf-check">✓</div>Planowanie i publikacja</div>
+        <div class="sf"><div class="sf-check">✓</div>Start: optymalizacja profilu (jednorazowo)</div>
+        <div class="sf"><div class="sf-check">✓</div>Raport + rozmowa 60 min z usprawnieniem AI</div>
       </div>
     </div>
     <div class="service-card reveal" style="transition-delay:.19s">
       <div class="card-glow"></div>
-      <div class="service-icon">💎</div>
-      <h3>Premium</h3>
-      <p>Kompleksowe zarządzanie obecnością dla ambitnych marek, które chcą dominować w swojej niszy.</p>
-      <div class="service-price">4 200 zł <span>/ miesiąc</span></div>
+      <div class="service-icon">🔍</div>
+      <h3>Audyt profilu</h3>
+      <p>Szybki start bez zobowiązań: sprawdzę Twój profil i powiem, co poprawić w pierwszej kolejności.</p>
+      <div class="service-price">249 zł <span>/ jednorazowo</span></div>
       <div class="service-features">
-        <div class="sf"><div class="sf-check">✓</div>Do 4 platform</div>
-        <div class="sf"><div class="sf-check">✓</div>Nieograniczona liczba postów</div>
-        <div class="sf"><div class="sf-check">✓</div>Produkcja video (8/mies.)</div>
-        <div class="sf"><div class="sf-check">✓</div>Kampanie płatne (Meta Ads)</div>
-        <div class="sf"><div class="sf-check">✓</div>Influencer outreach</div>
-        <div class="sf"><div class="sf-check">✓</div>Czas reakcji &lt;2h</div>
+        <div class="sf"><div class="sf-check">✓</div>Przegląd profilu i ostatnich postów</div>
+        <div class="sf"><div class="sf-check">✓</div>7 konkretnych zaleceń</div>
+        <div class="sf"><div class="sf-check">✓</div>15 min rozmowy</div>
+        <div class="sf"><div class="sf-check">✓</div>Kwota odliczana od 1. miesiąca abonamentu</div>
       </div>
-    </div>
-  </div>
-  <div class="addons reveal">
-    <div class="addons-label">Dodatki à la carte</div>
-    <div class="addons-grid">
-      <div class="addon-card"><div class="addon-name">Audyt profilu</div><div class="addon-price">350 zł</div></div>
-      <div class="addon-card"><div class="addon-name">Sesja zdjęciowa</div><div class="addon-price">od 600 zł</div></div>
-      <div class="addon-card"><div class="addon-name">Kampania Meta Ads</div><div class="addon-price">od 800 zł</div></div>
-      <div class="addon-card"><div class="addon-name">Szkolenie z social media</div><div class="addon-price">500 zł</div></div>
     </div>
   </div>
 </section>
@@ -404,7 +465,7 @@ footer .logo{font-size:1.2rem}
   <div class="gif-section reveal">
     <div class="gif-wrap">
       <div class="gif-frame">
-        <iframe src="https://giphy.com/embed/3oz7LkRUAZuCL1HXHC" width="340" height="270" frameborder="0" class="giphy-embed" allowfullscreen></iframe>
+        <img src="dobrze-fajnie.gif" alt="Dobrze fajnie gif" onerror="this.closest('.gif-section').style.display='none'">
       </div>
       <div class="gif-caption">Twoi klienci po pierwszym miesiącu współpracy 👆</div>
     </div>
@@ -414,34 +475,37 @@ footer .logo{font-size:1.2rem}
     <div class="kontakt-info reveal-left">
       <h3>Masz pytania?<br>Chętnie porozmawiam.</h3>
       <p>Napisz do mnie lub wypełnij formularz – odpiszę w ciągu 24 godzin. Pierwsza konsultacja jest bezpłatna.</p>
-      <div class="contact-item"><div class="ci-icon">📧</div><span>kontakt@gmedia.pl</span></div>
-      <div class="contact-item"><div class="ci-icon">📱</div><span>+48 600 000 000</span></div>
-      <div class="contact-item"><div class="ci-icon">📍</div><span>Polska – praca zdalna</span></div>
-      <div class="social-links">
-        <a href="#" class="social-link">📸</a>
-        <a href="#" class="social-link">🎵</a>
-        <a href="#" class="social-link">💼</a>
-        <a href="#" class="social-link">𝕏</a>
-      </div>
+      <div class="contact-item"><div class="ci-icon">📧</div><span>kontakt@grzegorzpich.pl</span></div>
+      <div class="contact-item"><div class="ci-icon">📱</div><span>+48 571 786 471</span></div>
+      <div class="contact-item"><div class="ci-icon">📍</div><span>Polska, Rzeszów</span></div>
+      <!-- TODO: social-links (Instagram, TikTok, LinkedIn) po podaniu adresów -->
     </div>
-    <form class="contact-form reveal-right" id="gmediaContactForm" action="#" method="POST">
+    
+    <form class="contact-form reveal-right" id="gmediaContactForm" action="https://formspree.io/f/mnjroarg" method="POST">
       <div class="form-row">
-        <div class="form-group"><label for="c_name">Imię i nazwisko</label><input type="text" id="c_name" name="c_name" placeholder="Anna Kowalska" required></div>
-        <div class="form-group"><label for="c_email">E-mail</label><input type="email" id="c_email" name="c_email" placeholder="anna@firma.pl" required></div>
+        <div class="form-group"><label for="c_name">Imię i nazwisko</label><input type="text" id="c_name" name="c_name" placeholder="Anna Kowalska" required=""></div>
+        <div class="form-group"><label for="c_email">E-mail</label><input type="email" id="c_email" name="c_email" placeholder="anna@firma.pl" required=""></div>
       </div>
       <div class="form-group"><label for="c_brand">Nazwa firmy / marki</label><input type="text" id="c_brand" name="c_brand" placeholder="Twoja firma"></div>
       <div class="form-group">
         <label for="c_service">Interesuje mnie</label>
         <select id="c_service" name="c_service">
-          <option value="" disabled selected>Wybierz pakiet lub usługę…</option>
-          <option>Pakiet Starter</option><option>Pakiet Growth</option>
-          <option>Pakiet Premium</option><option>Audyt profilu</option>
-          <option>Indywidualna wycena</option>
+          <option value="" disabled="" selected="">Wybierz pakiet lub usługę…</option>
+          <option value="Pakiet Starter">Pakiet Starter</option>
+          <option value="Pakiet Growth">Pakiet Growth</option>
+          <option value="Audyt profilu">Audyt profilu</option>
+          <option value="Indywidualna wycena">Indywidualna wycena</option>
         </select>
       </div>
-      <div class="form-group"><label for="c_message">Wiadomość</label><textarea id="c_message" name="c_message" placeholder="Opisz swoją markę i cele..." required></textarea></div>
-      <button type="submit" class="form-submit">Wyślij wiadomość →</button>
+      <div class="form-group"><label for="c_message">Wiadomość</label><textarea id="c_message" name="c_message" placeholder="Opisz swoją markę i cele..." required=""></textarea></div>
+      <button type="submit" class="form-submit" id="gmediaSubmitBtn">Wyślij wiadomość →</button>
     </form>
+
+    <div id="gmediaThankYou" class="thank-you-box reveal-right" style="display: none;">
+      <div class="ty-icon">⚡</div>
+      <h3>Wiadomość wysłana!</h3>
+      <p>Dzięki za kontakt. Skonwertujmy wspólnie Twoje social media! Odpowiem w ciągu najbliższych 24 godzin.</p>
+    </div>
   </div>
 </section>
 
@@ -452,6 +516,35 @@ footer .logo{font-size:1.2rem}
 </footer>
 
 <script>
+// ─── LOGIKA KURSORA (PRECYZYJNY PIORUN KURSOROWY) ───
+const cursorLightning = document.querySelector('.custom-cursor-lightning');
+
+if(cursorLightning) {
+  window.addEventListener('mousemove', (e) => {
+    // Brak przesunięcia o połowę szerokości (-50%) sprawia, że punkt (0,0) SVG działa jak szpic klasycznego kursora
+    cursorLightning.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+  });
+
+  // Ukrywanie kursora, kiedy opuści obszar roboczy strony (np. leci na paski zakładek systemu)
+  document.addEventListener('mouseleave', () => {
+    cursorLightning.classList.add('cursor-hidden');
+  });
+  document.addEventListener('mouseenter', () => {
+    cursorLightning.classList.remove('cursor-hidden');
+  });
+
+  // Obsługa stanów hover
+  const interactiveEls = document.querySelectorAll('a, button, input, textarea, select, .service-card, .addon-card, .tag, .fact-item');
+  interactiveEls.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      document.body.classList.add('custom-cursor-hover');
+    });
+    el.addEventListener('mouseleave', () => {
+      document.body.classList.remove('custom-cursor-hover');
+    });
+  });
+}
+
 // ─── CARD GLOW FOLLOW ───
 document.querySelectorAll('.service-card').forEach(card=>{
   const glow=card.querySelector('.card-glow');
@@ -540,20 +633,48 @@ if(heroStats && 'IntersectionObserver' in window) {
   counterIO.observe(heroStats);
 }
 
-// ─── FORM SUBMIT ANIMATION ───
+// ─── OBSŁUGA FORMSPREE PRZEZ AJAX (FETCH) ───
 const contactForm = document.getElementById('gmediaContactForm');
+const thankYouBox = document.getElementById('gmediaThankYou');
+
 if(contactForm) {
-  contactForm.addEventListener('submit', function(e) {
-    e.preventDefault();
+  contactForm.addEventListener('submit', async function(e) {
+    e.preventDefault(); // Blokujemy przeładowanie strony
+    
     const btn = this.querySelector('.form-submit');
-    btn.textContent='Wysyłanie…';
-    btn.disabled=true;
-    btn.style.background='linear-gradient(135deg,#6b21a8,#0e7490)';
-    setTimeout(()=>{
-      btn.textContent='✓ Wiadomość wysłana!';
-      btn.style.background='linear-gradient(135deg,#10b981,#059669)';
-      btn.style.boxShadow='0 12px 40px rgba(16,185,129,.4)';
-    },1400);
+    const originalText = btn.textContent;
+    
+    btn.textContent = 'Wysyłanie…';
+    btn.disabled = true;
+
+    const formData = new FormData(this);
+
+    try {
+      const response = await fetch(this.action, {
+        method: this.method,
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        // Sukces: Ukrywamy formularz i pokazujemy mockup podziękowania
+        contactForm.style.display = 'none';
+        thankYouBox.style.display = 'block';
+        thankYouBox.classList.add('visible'); // integracja z IntersectionObserver / reveal classes
+      } else {
+        // Błąd po stronie API Formspree
+        alert('Wystąpił problem z wysyłką. Spróbuj ponownie za chwilę.');
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    } catch (error) {
+      // Błąd połączenia sieciowego
+      alert('Błąd sieci. Sprawdź swoje połączenie internetowe.');
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
   });
 }
 
@@ -574,5 +695,5 @@ document.querySelectorAll('.service-card').forEach(card=>{
   });
 });
 </script>
-</body>
-</html>
+
+</body></html>
