@@ -102,6 +102,34 @@ textarea{height:130px;resize:vertical}
 footer{padding:3rem 0 3.5rem;color:var(--mute);font-size:.85rem}
 footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.8rem;align-items:center}
 footer .logo{color:var(--text)}
+
+/* kalkulator + quiz */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-top:3rem}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:2.2rem}
+.panel label{font-size:.85rem;color:var(--mute);letter-spacing:.02em;display:flex;justify-content:space-between;margin-bottom:.9rem}
+.panel label b{color:var(--text);font-family:'Syne',sans-serif;font-size:1.05rem}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2px;background:var(--line2);border:0;padding:0;border-radius:2px;accent-color:var(--lime)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--text);border:0;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--text);border:0;cursor:pointer}
+.panel .fg+.fg{margin-top:2rem}
+.out{display:flex;flex-direction:column;justify-content:space-between}
+.out .big{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(2.4rem,5vw,3.6rem);letter-spacing:-.03em;line-height:1}
+.out .big small{font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:400;color:var(--mute);letter-spacing:0}
+.out .cap{color:var(--mute);font-size:.9rem;margin:.6rem 0 1.6rem}
+.out .verdict{border-top:1px solid var(--line);padding-top:1.4rem;font-size:1rem}
+.out .fine{color:var(--mute);font-size:.8rem;margin-top:1.2rem}
+.quiz{margin-top:3rem}
+.qstep{display:none}
+.qstep.on{display:block}
+.qstep h3{font-size:1.35rem;margin-bottom:1.4rem;letter-spacing:-.015em}
+.qopts{display:flex;flex-wrap:wrap;gap:.7rem}
+.qopt{background:transparent;color:var(--text);border:1px solid var(--line2);border-radius:999px;padding:.75rem 1.4rem;font:inherit;font-size:.95rem;cursor:pointer;transition:border-color .25s,background .25s}
+.qopt:hover{border-color:var(--text);background:rgba(255,255,255,.04)}
+.qprog{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:1.1rem}
+.qres h3{font-size:1.7rem;margin-bottom:.6rem}
+.qres p{color:var(--mute);margin-bottom:1.6rem;max-width:52ch}
+.qreset{background:none;border:0;color:var(--mute);font:inherit;font-size:.88rem;text-decoration:underline;cursor:pointer;margin-left:1rem}
+@media(max-width:900px){.calc{grid-template-columns:1fr}}
 .js .reveal{opacity:0;transform:translateY(16px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
 .js .reveal.visible{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
@@ -130,7 +158,7 @@ footer .logo{color:var(--text)}
 <section id="hero"><div class="wrap">
   <div class="eyebrow">Social media dla małych firm</div>
   <h1>Przestań robić posty po godzinach.</h1>
-  <p class="lead">Prowadzę Instagram i Facebook małych firm z Podkarpacia i całej Polski. Plan treści, posty, publikacja i raport co miesiąc. Ty zatwierdzasz, resztę robię ja.</p>
+  <p class="lead">Prowadzę Instagram i Facebook małych firm z Podkarpacia i całej Polski.<br>Plan treści, posty, publikacja.</p>
   <div class="btns">
     <a href="#kontakt" class="btn btn-primary">Napisz do mnie <span class="arr">→</span></a>
     <a href="#uslugi" class="btn btn-ghost">Zobacz cennik</a>
@@ -169,12 +197,34 @@ footer .logo{color:var(--text)}
   </div>
 </div></section>
 
-<section id="uslugi"><div class="wrap reveal">
-  <div class="label"><i>04</i>Cennik</div>
-  <h2>Trzy opcje, bez ukrytych kosztów.</h2>
-  <p class="lead">Nie wiesz, co wybrać? Napisz, razem dobierzemy pakiet do Twojej firmy.</p>
+<section id="kalkulator"><div class="wrap reveal">
+  <div class="label"><i>04</i>Kalkulator</div>
+  <h2>Ile kosztują Cię posty po godzinach?</h2>
+  <p class="lead">Ustaw, ile czasu tygodniowo poświęcasz na social media i ile jest warta Twoja godzina. Wynik może Ci się nie spodobać, i dobrze.</p>
+  <div class="calc">
+    <div class="panel">
+      <div class="fg"><label for="calcH">Godzin tygodniowo na social media <b id="calcHv">4 h</b></label><input type="range" id="calcH" min="1" max="15" step="1" value="4"></div>
+      <div class="fg"><label for="calcR">Wartość Twojej godziny <b id="calcRv">80 zł</b></label><input type="range" id="calcR" min="30" max="300" step="10" value="80"></div>
+    </div>
+    <div class="panel out">
+      <div><div class="big" id="calcCost">0 zł <small>/ miesiąc</small></div><div class="cap" id="calcCap"></div></div>
+      <div><div class="verdict" id="calcVerdict"></div><div class="fine">Liczone: godziny × 4,33 tygodnia × stawka. Pokazuje tylko czas, nie jakość ani regularność postów.</div></div>
+    </div>
+  </div>
+</div></section>
 
-<div class="plans">
+<section id="uslugi"><div class="wrap reveal">
+  <div class="label"><i>05</i>Cennik</div>
+  <h2>Trzy opcje, bez ukrytych kosztów.</h2>
+  <p class="lead">Nie wiesz, co wybrać? Odpowiedz na trzy pytania, a podpowiem pakiet.</p>
+
+  <div class="quiz panel" id="quiz">
+    <div class="qstep on" data-q="1"><div class="qprog">Który pakiet? 1 / 3</div><h3>Na ilu platformach chcesz być aktywny?</h3><div class="qopts"><button class="qopt" data-v="1">Jedna</button><button class="qopt" data-v="2">Dwie</button></div></div>
+    <div class="qstep" data-q="2"><div class="qprog">Który pakiet? 2 / 3</div><h3>Ile treści chcesz miesięcznie?</h3><div class="qopts"><button class="qopt" data-v="12">Około 12 postów</button><button class="qopt" data-v="16">16 postów i Reelsy</button></div></div>
+    <div class="qstep" data-q="3"><div class="qprog">Który pakiet? 3 / 3</div><h3>Jak wygląda Twój profil dziś?</h3><div class="qopts"><button class="qopt" data-v="start">Nie mam systemu, wrzucam, kiedy się uda</button><button class="qopt" data-v="audit">Jest, ale nie wiem, co poprawić</button><button class="qopt" data-v="grow">Działa, chcę większego zasięgu</button></div></div>
+    <div class="qstep qres" data-q="r"><div class="qprog">Moja rekomendacja</div><h3 id="qName"></h3><p id="qWhy"></p><a href="#kontakt" class="btn btn-primary" id="qCta">Napisz w tej sprawie <span class="arr">→</span></a><button class="qreset" id="qReset" type="button">Zacznij od nowa</button></div>
+  </div>
+  <div class="plans">
 <div class="plan"><h3>Starter</h3><p class="tagline">Dla małych firm, które chcą regularnie być widoczne na jednej platformie.</p><div class="price">1 200 zł<small>/ mies.</small></div><ul><li>1 platforma (Instagram lub Facebook)</li><li>12 postów miesięcznie (4 karuzele + 8 grafik)</li><li>Planowanie i publikacja</li><li>Plan treści i research</li><li>Raport miesięczny</li></ul></div>
 <div class="plan feat"><span class="rec">Polecany</span><h3>Growth</h3><p class="tagline">Dla firm, które chcą rosnąć: druga platforma, Reelsy i rozmowa o strategii.</p><div class="price">2 000 zł<small>/ mies.</small></div><ul><li>2 platformy (Instagram + Facebook lub LinkedIn)</li><li>16 postów miesięcznie + 2 Reelsy</li><li>Plan treści i research</li><li>Planowanie i publikacja</li><li>Na start: optymalizacja profilu (jednorazowo)</li><li>Raport i rozmowa 60 min o wykorzystaniu AI w Twojej firmie</li></ul></div>
 <div class="plan"><h3>Audyt profilu</h3><p class="tagline">Dobry start bez zobowiązań: sprawdzę profil i powiem, co poprawić najpierw.</p><div class="price">249 zł<small>jednorazowo</small></div><ul><li>Przegląd profilu i ostatnich postów</li><li>7 konkretnych zaleceń</li><li>15 minut rozmowy</li><li>Kwota odliczana od 1. miesiąca abonamentu</li></ul></div>
@@ -183,7 +233,7 @@ footer .logo{color:var(--text)}
 </div></section>
 
 <section id="kontakt"><div class="wrap reveal">
-  <div class="label"><i>05</i>Kontakt</div>
+  <div class="label"><i>06</i>Kontakt</div>
   <h2>Napisz, odpowiem w ciągu 24 godzin.</h2>
   <div class="gif-section"><img src="dobrze-fajnie.gif" alt="" onerror="this.closest('.gif-section').style.display='none'"><p>Twoi klienci po pierwszym miesiącu współpracy.</p></div>
   <div class="two" style="margin-top:2.5rem">
@@ -226,6 +276,57 @@ if('IntersectionObserver' in window){
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}})},{threshold:.1});
   els.forEach(function(el){io.observe(el)});
 }else{els.forEach(function(el){el.classList.add('visible')})}
+
+// kalkulator
+(function(){
+  var h=document.getElementById('calcH'),r=document.getElementById('calcR');
+  if(!h)return;
+  function fmt(n){return Math.round(n).toLocaleString('pl-PL').replace(/\u00a0/g,' ')}
+  function upd(){
+    var hv=+h.value,rv=+r.value,cost=hv*4.33*rv;
+    document.getElementById('calcHv').textContent=hv+' h';
+    document.getElementById('calcRv').textContent=rv+' zł';
+    document.getElementById('calcCost').innerHTML=fmt(cost)+' zł <small>/ miesiąc</small>';
+    document.getElementById('calcCap').textContent='tyle jest warty Twój czas na posty, licząc po '+rv+' zł za godzinę';
+    var v;
+    if(cost>=1200)v='Twój czas jest wart więcej niż Starter (1 200 zł). Do tego dochodzi plan treści, regularność i raport. W tej sytuacji zlecenie ma sens.';
+    else if(cost>=700)v='Na samym czasie wychodzi taniej niż Starter. Zlecenie ma sens, jeśli posty wypadają Ci nieregularnie albo wolisz oddać to komuś na stałe.';
+    else v='Przy takim nakładzie taniej będzie robić to samemu. Wróć, gdy zacznie brakować czasu albo regularności.';
+    document.getElementById('calcVerdict').textContent=v;
+  }
+  h.addEventListener('input',upd);r.addEventListener('input',upd);upd();
+})();
+// quiz pakietu
+(function(){
+  var quiz=document.getElementById('quiz');
+  if(!quiz)return;
+  var ans={};
+  function show(q){quiz.querySelectorAll('.qstep').forEach(function(e){e.classList.toggle('on',e.dataset.q===q)})}
+  var packs={
+    Starter:{v:'Pakiet Starter',why:'Jedna platforma, około 12 postów miesięcznie, plan treści i raport. Dobry na regularny start. Od 1 200 zł miesięcznie.'},
+    Growth:{v:'Pakiet Growth',why:'Dwie platformy, 16 postów i 2 Reelsy, optymalizacja profilu na start i rozmowa o strategii. 2 000 zł miesięcznie.'},
+    Audyt:{v:'Audyt profilu',why:'Najpierw sprawdzę profil i wskażę 7 konkretnych zmian. 249 zł, kwota odliczana od pierwszego miesiąca abonamentu.'}
+  };
+  quiz.addEventListener('click',function(e){
+    var b=e.target.closest('.qopt');
+    if(b){
+      var q=b.closest('.qstep').dataset.q;ans[q]=b.dataset.v;
+      if(q==='1')show('2');else if(q==='2')show('3');
+      else{
+        var k=ans['3']==='audit'?'Audyt':(ans['1']==='2'||ans['2']==='16'||ans['3']==='grow')?'Growth':'Starter';
+        document.getElementById('qName').textContent=k==='Audyt'?'Audyt profilu':k;
+        document.getElementById('qWhy').textContent=packs[k].why;
+        var cta=document.getElementById('qCta');cta.dataset.pack=k;show('r');
+      }
+    }
+    if(e.target.closest('#qCta')){
+      var p=packs[e.target.closest('#qCta').dataset.pack],sel=document.getElementById('c_service'),msg=document.getElementById('c_message');
+      if(sel)sel.value=p.v;
+      if(msg&&!msg.value)msg.value='Dzień dobry, z quizu wyszło mi: '+p.v+'. Chciałbym/Chciałabym porozmawiać o szczegółach.';
+    }
+    if(e.target.closest('#qReset')){ans={};show('1')}
+  });
+})();
 var f=document.getElementById('gmediaContactForm'),ty=document.getElementById('gmediaThankYou');
 f.addEventListener('submit',async function(e){
   e.preventDefault();
